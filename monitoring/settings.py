@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'monitoring.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'name_db',
-        'USER': 'user_db',
-        'PASSWORD': 'pass',
-        'HOST': 'ip_instance',
+        'NAME': 'monitoring_db',
+        'USER': 'monitoring_user',
+        'PASSWORD': 'ISIS2503',
+        'HOST': '18.206.200.216',
         'PORT': '5432',
     }
 }
@@ -134,3 +134,22 @@ MEDIA_URL = '/static/media/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
+
+LOGIN_URL = "/login/auth0"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "https://isis2503-jespitiaa.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.204.42.252:8000"
+
+
+SOCIAL_AUTH_TRAILING_SLASH = False # Remove end slash from routes
+SOCIAL_AUTH_AUTH0_DOMAIN = 'isis2503-jespitiaa.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'wXpNK1j16Jw6TXwKHcpUQ6TIex7pgveJ'
+SOCIAL_AUTH_AUTH0_SECRET = 'GSposXyDESFrJ5jytW5Ya_NSUo5I9yfR0IStjAstba5sL-u8tK0XV1gNtV-yPFh1'
+
+SOCIAL_AUTH_AUTH0_SCOPE = [
+ 'openid',
+ 'profile'
+]
+AUTHENTICATION_BACKENDS = {
+ 'measurements.auth0backend.Auth0',
+ 'django.contrib.auth.backends.ModelBackend',
+}

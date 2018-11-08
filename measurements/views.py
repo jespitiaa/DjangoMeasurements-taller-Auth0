@@ -1,4 +1,4 @@
-from .models import Measurement, Threshold, Variable
+from .models import Measurement, Threshold, Variable, Average
 from django.shortcuts import render, redirect
 from .forms import ThresholdForm
 from django.contrib.auth.decorators import login_required
@@ -28,6 +28,18 @@ def ThresholdList(request):
     return render(request, 'Threshold/thresholds.html', context)
 
 @login_required
+def AverageList (request):
+    queryset = Average.objects.all()
+    role = getRole(request)
+    context = {
+        'average_list': queryset,
+        'role': role
+    }
+    print("role= ", role)
+    return render(request, 'Average/averages.html', context)
+ 
+
+@login_required
 def ThresholdEdit(request, id_threshold):
     threshold = Threshold.objects.get(variable=id_threshold)
     varName = Variable.objects.get(id=id_threshold)
@@ -40,3 +52,14 @@ def ThresholdEdit(request, id_threshold):
         return redirect('thresholdList')
     role = getRole(request)
     return render(request, 'Threshold/thresholdEdit.html', {'form':form, 'variable':varName.name, 'role': role})
+
+def getRole(request):
+ user = request.user
+ auth0user = user.social_auth.get(provider="auth0")
+ accessToken = auth0user.extra_data['access_token']
+ url = "isis2503-jespitiaa.auth0.com/userinfo"
+ headers = {'authorization': 'Bearer ' + accessToken}
+ resp = requests.get(url, headers=headers)
+ userinfo = resp.json()
+ role= userinfo['isis2503-jespitiaa.auth0.com/role']
+ return (role)

@@ -25,3 +25,12 @@ class Threshold(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.thresholdMax, self.variable.name)
+
+class Average (models.Model):
+    total = models.IntegerField()
+    avg = models.FloatField(null=True, blank=True, default=None)
+    variable = models.OneToOneField(Variable, on_delete=models.CASCADE, primary_key=True)
+
+
+    def __str__(self):
+        return '%s %s' % (self.avg, self.variable.name)
